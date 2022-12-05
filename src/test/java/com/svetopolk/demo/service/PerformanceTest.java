@@ -1,10 +1,9 @@
 package com.svetopolk.demo.service;
 
 import com.svetopolk.demo.dto.Location;
-import com.svetopolk.demo.dto.UserDataRequest;
+import com.svetopolk.demo.dto.UserInfoRequest;
 import com.svetopolk.demo.dto.UserLocationRequest;
-import com.svetopolk.demo.dto.UserLocationResponse;
-import com.svetopolk.demo.entity.User;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,9 +16,7 @@ import java.util.UUID;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class PerformanceTest {
@@ -31,6 +28,7 @@ class PerformanceTest {
     UserService userService;
 
     @Test
+    @Disabled("time consuming test")
     void performanceTest() {
         int numberOfUsers = 100;
         int numberOfDays = 30;
@@ -41,7 +39,7 @@ class PerformanceTest {
         IntStream.range(0, numberOfUsers).forEach(x -> {
                     UUID userId = UUID.randomUUID();
                     users.add(userId);
-                    var userDataRequest = new UserDataRequest(userId, "user" + x + "@g.com", "User_" + x, "User");
+                    var userDataRequest = new UserInfoRequest(userId, "user" + x + "@g.com", "User_" + x, "User");
                     userService.save(userDataRequest);
                 }
         );

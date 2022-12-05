@@ -1,14 +1,15 @@
 package com.svetopolk.demo.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public record UserDataRequest(
+public record UserInfoRequest(
         @NotNull(message = "userId is mandatory")
         UUID userId,
-        @NotNull(message = "email is mandatory")
-        String email, //TODO email validation
+        @Email(message = "invalid email")
+        String email,
         @NotNull(message = "firstName is mandatory")
         String firstName,
         @NotNull(message = "secondName is mandatory")

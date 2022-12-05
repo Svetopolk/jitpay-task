@@ -41,17 +41,13 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
-
-    @MockBean
     private LocationService locationService;
-
 
     @Test
     @SneakyThrows
     void putUser() {
         var request = MockMvcRequestBuilders
-                .put("/users")
+                .put("/v2/users/2e3b11b0-07a4-4873-8de5-d2ae2eab26b2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -78,7 +74,7 @@ class UserControllerTest {
 
         Mockito.when(locationService.getLocation(any())).thenReturn(value);
 
-        mockMvc.perform(get("/users/2e3b11b0-07a4-4873-8de5-d2ae2eab26b2/location"))
+        mockMvc.perform(get("/v2/users/2e3b11b0-07a4-4873-8de5-d2ae2eab26b2/location"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -100,7 +96,7 @@ class UserControllerTest {
 
         Mockito.when(locationService.getLocations(any(), any(), any())).thenReturn(value);
 
-        mockMvc.perform(get("/users/2e3b11b0-07a4-4873-8de5-d2ae2eab26b2/locations")
+        mockMvc.perform(get("/v2/users/2e3b11b0-07a4-4873-8de5-d2ae2eab26b2/locations")
                         .queryParam("from", "2022-02-08T11:40:00")
                         .queryParam("to", "2022-02-08T11:44:00")
                 )
@@ -116,7 +112,7 @@ class UserControllerTest {
 
     @Test
     void getLocationsWithoutFromParam() throws Exception {
-        mockMvc.perform(get("/users/2e3b11b0-07a4-4873-8de5-d2ae2eab26b2/locations"))
+        mockMvc.perform(get("/v2/users/2e3b11b0-07a4-4873-8de5-d2ae2eab26b2/locations"))
                 .andExpect(status().isBadRequest());
     }
 }

@@ -35,7 +35,7 @@ class MobileControllerTest {
     @Test
     void postLocation() throws Exception {
         var request = MockMvcRequestBuilders
-                .post("/mobile/locations")
+                .post("/v2/mobile/locations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -55,7 +55,7 @@ class MobileControllerTest {
     @Test
     void postLocationAbsentUserId() throws Exception {
         var request = MockMvcRequestBuilders
-                .post("/mobile/locations")
+                .post("/v2/mobile/locations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -70,7 +70,7 @@ class MobileControllerTest {
     @Test
     void postLocationNotJson() throws Exception {
         var request = MockMvcRequestBuilders
-                .post("/mobile/locations")
+                .post("/v2/mobile/locations")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("not json");
         mockMvc.perform(request)

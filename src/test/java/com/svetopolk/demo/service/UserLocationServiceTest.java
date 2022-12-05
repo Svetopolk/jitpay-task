@@ -2,7 +2,7 @@ package com.svetopolk.demo.service;
 
 import com.svetopolk.demo.dto.Location;
 import com.svetopolk.demo.dto.LocationWithDate;
-import com.svetopolk.demo.dto.UserDataRequest;
+import com.svetopolk.demo.dto.UserInfoRequest;
 import com.svetopolk.demo.dto.UserLocationRequest;
 import com.svetopolk.demo.dto.UserLocationResponse;
 import com.svetopolk.demo.exception.UserNotFoundException;
@@ -33,7 +33,7 @@ class UserLocationServiceTest {
     @BeforeEach
     void init() {
         userId = UUID.randomUUID();
-        var userDataRequest = new UserDataRequest(userId, "alex.schmid@gmail.com", "Alex", "Schmid");
+        var userDataRequest = new UserInfoRequest(userId, "alex.schmid@gmail.com", "Alex", "Schmid");
         userService.save(userDataRequest);
     }
 

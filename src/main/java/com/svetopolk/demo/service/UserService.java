@@ -1,6 +1,6 @@
 package com.svetopolk.demo.service;
 
-import com.svetopolk.demo.dto.UserDataRequest;
+import com.svetopolk.demo.dto.UserInfoRequest;
 import com.svetopolk.demo.entity.User;
 import com.svetopolk.demo.exception.UserNotFoundException;
 import com.svetopolk.demo.repository.UserRepository;
@@ -15,8 +15,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User save(UserDataRequest userDataRequest) {
-        var user = new User(userDataRequest.userId(), userDataRequest.email(), userDataRequest.firstName(), userDataRequest.secondName());
+    public User save(UserInfoRequest userInfoRequest) {
+        var user = new User(userInfoRequest.userId(), userInfoRequest.email(), userInfoRequest.firstName(), userInfoRequest.secondName());
         return userRepository.save(user);
     }
 

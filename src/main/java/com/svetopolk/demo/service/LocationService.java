@@ -1,17 +1,14 @@
 package com.svetopolk.demo.service;
 
-import com.svetopolk.demo.dto.ApiResponse;
 import com.svetopolk.demo.dto.Location;
 import com.svetopolk.demo.dto.LocationWithDate;
-import com.svetopolk.demo.dto.UserLocationResponse;
-import com.svetopolk.demo.dto.UserLocationRequest;
 import com.svetopolk.demo.dto.UserLocationRangeResponse;
+import com.svetopolk.demo.dto.UserLocationRequest;
+import com.svetopolk.demo.dto.UserLocationResponse;
 import com.svetopolk.demo.entity.UserLocation;
 import com.svetopolk.demo.exception.LocationNotFoundException;
 import com.svetopolk.demo.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -37,7 +34,6 @@ public class LocationService {
     }
 
     public UserLocationRangeResponse getLocations(UUID userId, LocalDateTime from, LocalDateTime to) {
-        // System.out.println("userId " + userId + " from " + from + " to" + to);
         Duration duration = Duration.between(from, to);
         if (duration.compareTo(Duration.ofDays(31)) > 0) {
             throw new IllegalArgumentException("duration can not be more than a month");
