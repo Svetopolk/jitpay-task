@@ -16,7 +16,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User save(UserDataRequest userDataRequest) {
-        var user = new User(UUID.fromString(userDataRequest.userId()), userDataRequest.email(), userDataRequest.firstName(), userDataRequest.secondName());
+        var user = new User(userDataRequest.userId(), userDataRequest.email(), userDataRequest.firstName(), userDataRequest.secondName());
         return userRepository.save(user);
     }
 

@@ -1,5 +1,6 @@
 package com.svetopolk.demo.service;
 
+import com.svetopolk.demo.dto.ApiResponse;
 import com.svetopolk.demo.dto.Location;
 import com.svetopolk.demo.dto.LocationWithDate;
 import com.svetopolk.demo.dto.UserLocationResponse;
@@ -9,8 +10,11 @@ import com.svetopolk.demo.entity.UserLocation;
 import com.svetopolk.demo.exception.LocationNotFoundException;
 import com.svetopolk.demo.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -22,10 +26,9 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final UserService userService;
 
-    public void store(UserLocationRequest userLocationRequest) {
-        System.out.println("store" + userLocationRequest);
+    public void saveLocation(UserLocationRequest userLocationRequest) {
         UserLocation userLocation = new UserLocation(
-                UUID.fromString(userLocationRequest.userId()),
+                userLocationRequest.userId(),
                 userLocationRequest.createdOn(),
                 userLocationRequest.location().latitude(),
                 userLocationRequest.location().longitude()
@@ -34,24 +37,28 @@ public class LocationService {
     }
 
     public UserLocationRangeResponse getLocations(UUID userId, LocalDateTime from, LocalDateTime to) {
-        System.out.println("userId=" + userId + " from=" + from + " to=" + to);
+        // System.out.println("userId " + userId + " from " + from + " to" + to);
+        Duration duration = Duration.between(from, to);
+        if (duration.compareTo(Duration.ofDays(31)) > 0) {
+            throw new IllegalArgumentException("duration can not be more than a month");
+        }
+
         var user = userService.get(userId);
         List<LocationWithDate> locations = locationRepository.findRange(userId, from, to)
                 .stream()
                 .map(x -> new LocationWithDate(x.getCreatedOn(), new Location(x.getLatitude(), x.getLongitude())))
                 .toList();
-        return new UserLocationRangeResponse(user.getUserId().toString(), locations);
+        return new UserLocationRangeResponse(user.getUserId(), locations);
     }
 
     public UserLocationResponse getLocation(UUID userId) {
-        System.out.println("userId=" + userId);
         var user = userService.get(userId);
         UserLocation userLocation = locationRepository.findLatest(userId);
         if (userLocation == null) {
             throw new LocationNotFoundException();
         }
         return new UserLocationResponse(
-                userLocation.getUserId().toString(),
+                userLocation.getUserId(),
                 user.getFirstName(),
                 user.getSecondName(),
                 new Location(userLocation.getLatitude(), userLocation.getLongitude())

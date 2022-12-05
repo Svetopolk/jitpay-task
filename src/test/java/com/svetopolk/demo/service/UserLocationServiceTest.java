@@ -33,7 +33,7 @@ class UserLocationServiceTest {
     @BeforeEach
     void init() {
         userId = UUID.randomUUID();
-        var userDataRequest = new UserDataRequest(userId.toString(), "alex.schmid@gmail.com", "Alex", "Schmid");
+        var userDataRequest = new UserDataRequest(userId, "alex.schmid@gmail.com", "Alex", "Schmid");
         userService.save(userDataRequest);
     }
 
@@ -42,11 +42,11 @@ class UserLocationServiceTest {
         var time = LocalDateTime.of(2000, 1, 15, 15, 0, 0);
         var location = new Location(52.25742342295784, 10.540583401747602);
 
-        locationService.store(new UserLocationRequest(userId.toString(), time, location));
-        locationService.store(new UserLocationRequest(userId.toString(), time.minusSeconds(1), location));
-        locationService.store(new UserLocationRequest(userId.toString(), time.minusSeconds(2), location));
+        locationService.saveLocation(new UserLocationRequest(userId, time, location));
+        locationService.saveLocation(new UserLocationRequest(userId, time.minusSeconds(1), location));
+        locationService.saveLocation(new UserLocationRequest(userId, time.minusSeconds(2), location));
 
-        var expectedUserLocation = new UserLocationResponse(userId.toString(), "Alex", "Schmid", location);
+        var expectedUserLocation = new UserLocationResponse(userId, "Alex", "Schmid", location);
         var actualUserLocation = locationService.getLocation(userId);
         assertThat(actualUserLocation, is(expectedUserLocation));
     }
@@ -56,13 +56,13 @@ class UserLocationServiceTest {
         var time = LocalDateTime.of(2000, 1, 15, 15, 0, 0);
         var location = new Location(52.25742342295784, 10.540583401747602);
 
-        locationService.store(new UserLocationRequest(userId.toString(), time, location));
-        locationService.store(new UserLocationRequest(userId.toString(), time.minusDays(1), location));
-        locationService.store(new UserLocationRequest(userId.toString(), time.plusHours(1), location));
-        locationService.store(new UserLocationRequest(userId.toString(), time.plusHours(25), location));
+        locationService.saveLocation(new UserLocationRequest(userId, time, location));
+        locationService.saveLocation(new UserLocationRequest(userId, time.minusDays(1), location));
+        locationService.saveLocation(new UserLocationRequest(userId, time.plusHours(1), location));
+        locationService.saveLocation(new UserLocationRequest(userId, time.plusHours(25), location));
 
         var actualLocationRangeRespond = locationService.getLocations(userId, time.minusSeconds(1), time.plusDays(1));
-        assertThat(actualLocationRangeRespond.userId(), is(userId.toString()));
+        assertThat(actualLocationRangeRespond.userId(), is(userId));
         assertThat(actualLocationRangeRespond.locationWithDate(), hasSize(2));
         assertThat(actualLocationRangeRespond.locationWithDate().get(0), is(new LocationWithDate(time, location)));
     }

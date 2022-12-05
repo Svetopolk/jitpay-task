@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -70,7 +71,7 @@ class UserControllerTest {
     @Test
     void getLocation() throws Exception {
         UserLocationResponse value = new UserLocationResponse(
-                "2e3b11b0-07a4-4873-8de5-d2ae2eab26b2",
+                UUID.fromString("2e3b11b0-07a4-4873-8de5-d2ae2eab26b2"),
                 "Alex",
                 "Schmid",
                 new Location(52.25742342295784, 10.540583401747602));
@@ -91,7 +92,7 @@ class UserControllerTest {
     @Test
     void getLocations() throws Exception {
         var value = new UserLocationRangeResponse(
-                "2e3b11b0-07a4-4873-8de5-d2ae2eab26b2",
+                UUID.fromString("2e3b11b0-07a4-4873-8de5-d2ae2eab26b2"),
                 List.of(new LocationWithDate(
                         LocalDateTime.of(2000, 12, 30, 15, 59, 0),
                         new Location(52.25742342295784, 10.540583401747602)))
